@@ -114,7 +114,8 @@ export default function KurwomatApp() {
 
   // ── MIC VOLUME MONITOR ──
   const startVolumeMonitor = (stream: MediaStream) => {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const AudioCtx = (window as any).AudioContext || (window as any).webkitAudioContext;
+    const ctx = new AudioCtx();
     const src = ctx.createMediaStreamSource(stream);
     const analyser = ctx.createAnalyser();
     analyser.fftSize = 256;
@@ -132,7 +133,7 @@ export default function KurwomatApp() {
 
   // ── START MIC ──
   const startMic = useCallback(async () => {
-    const SR = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) { setMicStatus('error'); return; }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -629,11 +630,4 @@ function PanicMode({ onReturn }: { onReturn: () => void }) {
   );
 }
 
-// ── CSS class for panel ───────────────────────────────────────────────────────
-// (inject into globals.css or use inline — kept here for self-containment)
-if (typeof document !== 'undefined' && !document.getElementById('panel-style')) {
-  const style = document.createElement('style');
-  style.id = 'panel-style';
-  style.textContent = `.panel{background:linear-gradient(180deg,#1e140a 0%,#140e06 40%,#1a1208 100%);border:1px solid rgba(255,100,0,.22);border-radius:3px;position:relative;overflow:hidden;animation:borderBurn 3s ease-in-out infinite}.panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0px,transparent 3px,rgba(255,255,255,.006) 3px,rgba(255,255,255,.006) 4px)}.panel::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,150,0,.45),transparent);pointer-events:none}`;
-  document.head.appendChild(style);
-}
+// Panel CSS is defined in globals.css

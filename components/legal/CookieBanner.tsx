@@ -1,6 +1,3 @@
-// ══════════════════════════════════════════════════════
-// components/legal/CookieBanner.tsx
-// ══════════════════════════════════════════════════════
 'use client';
 import { useState, useEffect } from 'react';
 
@@ -13,10 +10,11 @@ export default function CookieBanner() {
   }, []);
 
   function accept() {
-    localStorage.setItem('kw_consent', JSON.stringify({ accepted:true, ts:Date.now() }));
+    localStorage.setItem('kw_consent', JSON.stringify({ accepted: true, ts: Date.now() }));
     setVisible(false);
-    // Fire GA if accepted
-    if (window.gtag) window.gtag('consent', 'update', { analytics_storage:'granted' });
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('consent', 'update', { analytics_storage: 'granted' });
+    }
   }
 
   if (!visible) return null;
@@ -34,7 +32,6 @@ export default function CookieBanner() {
       }}>
         <div style={{ position:'absolute', top:0, left:0, right:0, height:4,
           background:'repeating-linear-gradient(45deg,#ff2200 0px,#ff2200 6px,#1a0800 6px,#1a0800 12px)', opacity:.8 }} />
-
         <div style={{ maxWidth:500, margin:'0 auto' }}>
           <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
             <span style={{ fontSize:32, flexShrink:0, filter:'drop-shadow(0 0 10px rgba(255,80,0,.7))' }}>⚠️</span>
@@ -43,10 +40,12 @@ export default function CookieBanner() {
                 INSTYTUT WKURWU — PROTOKÓŁ PRYWATNOŚCI
               </div>
               <p style={{ fontFamily:"'Share Tech Mono',monospace", fontSize:11, color:'rgba(255,200,100,.7)', lineHeight:1.7, margin:0 }}>
-                Kurwomat używa <strong style={{color:'#ff8800'}}>ciasteczek</strong> i opcjonalnie <strong style={{color:'#ff8800'}}>mikrofonu</strong> (wyłącznie lokalnie w przeglądarce — nic nie nagrywamy!), żeby mierzyć poziom narodowej frustracji w czasie rzeczywistym. Wchodzisz na własne ryzyko.
+                Kurwomat używa <strong style={{color:'#ff8800'}}>ciasteczek</strong> i opcjonalnie{' '}
+                <strong style={{color:'#ff8800'}}>mikrofonu</strong> (wyłącznie lokalnie — nic nie nagrywamy!),
+                żeby mierzyć poziom narodowej frustracji. Wchodzisz na własne ryzyko.
               </p>
               <div style={{ display:'flex', gap:14, marginTop:10, flexWrap:'wrap' }}>
-                {['🎤 Mikrofon: lokalnie','📊 Dane: anonimowe','🚫 Brak nagrań','🍪 Ciastka: session'].map(b=>(
+                {['🎤 Mikrofon: lokalnie','📊 Dane: anonimowe','🚫 Brak nagrań','🍪 Ciastka: session'].map(b => (
                   <span key={b} style={{ fontFamily:"'Share Tech Mono',monospace", fontSize:9, color:'rgba(255,150,80,.55)' }}>{b}</span>
                 ))}
               </div>

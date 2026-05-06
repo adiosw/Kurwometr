@@ -1,4 +1,3 @@
-// components/analytics/GoogleAnalytics.tsx
 'use client';
 import Script from 'next/script';
 
@@ -8,7 +7,10 @@ export default function GoogleAnalytics() {
 
   return (
     <>
-      <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+        strategy="afterInteractive"
+      />
       <Script id="ga4-init" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
@@ -19,25 +21,14 @@ export default function GoogleAnalytics() {
             page_location: window.location.href,
             anonymize_ip: true,
           });
-
-          // Custom events
           window.trackKurwa = function(source) {
-            gtag('event', 'kurwa_click', {
-              event_category: 'engagement',
-              event_label: source || 'button',
-            });
+            gtag('event', 'kurwa_click', { event_category: 'engagement', event_label: source || 'button' });
           };
           window.trackDonate = function(amount) {
-            gtag('event', 'begin_checkout', {
-              currency: 'PLN',
-              value: amount,
-            });
+            gtag('event', 'begin_checkout', { currency: 'PLN', value: amount });
           };
           window.trackLuckyShot = function(tier) {
-            gtag('event', 'lucky_shot_win', {
-              event_category: 'monetization',
-              event_label: 'tier_' + tier,
-            });
+            gtag('event', 'lucky_shot_win', { event_category: 'monetization', event_label: 'tier_' + tier });
           };
         `}
       </Script>
